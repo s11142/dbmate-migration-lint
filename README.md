@@ -1,0 +1,2 @@
+# dbmate-migration-lint
+dbmateで作成したmigrationファイルの静的解析を行うためのリポジトリ
