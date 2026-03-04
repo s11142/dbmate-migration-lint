@@ -1,0 +1,28 @@
+name: 'dbmate Migration Lint'
+description: 'dbmate マイグレーションファイルの静的解析を行い、破壊的変更や命名規約違反を検出する'
+
+inputs:
+  migration-dir:
+    description: 'マイグレーションファイルのディレクトリパス'
+    required: false
+    default: 'db/migrations'
+  base-ref:
+    description: '比較元のgit ref（デフォルト: PRのbase SHA）'
+    required: false
+    default: ''
+
+outputs:
+  violations-count:
+    description: '検出された違反の総数'
+    value: ${{ steps.lint.outputs.violations-count }}
+
+runs:
+  using: 'composite'
+  steps:
+    - name: Run migration lint
+      id: lint
+      shell: bash
+      env:
+        MIGRATION_DIR: ${{ inputs.migration-dir }}
+        BASE_REF: ${{ inputs.base-ref || github.event.pull_request.base.sha }}
+      run: bash "${GITHUB_ACTION_PATH}/scripts/lint.sh"
