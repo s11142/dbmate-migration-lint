@@ -1,42 +1,12 @@
 # dbmate-migration-lint
 
-dbmate で管理する MySQL マイグレーションファイルの静的解析を行う GitHub Actions Composite Action。
+dbmate で管理する MySQL マイグレーションファイルの静的解析ツール。
 PRレビュー時に破壊的変更や命名規約違反を自動検出し、安全なマイグレーション運用を支援する。
 
-## 使い方
+## CI 設定
 
-```yaml
-# .github/workflows/migration-lint.yml
-name: Migration Lint
-on:
-  pull_request:
-    paths:
-      - 'db/migrations/**'
-
-jobs:
-  lint:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
-      - uses: s11142/dbmate-migration-lint@v1
-        with:
-          migration-dir: 'db/migrations'  # デフォルト: db/migrations
-```
-
-## Inputs
-
-| Name | 説明 | デフォルト |
-|------|------|-----------|
-| `migration-dir` | マイグレーションファイルのディレクトリパス | `db/migrations` |
-| `base-ref` | 比較元の git ref | PRのbase SHA |
-
-## Outputs
-
-| Name | 説明 |
-|------|------|
-| `violations-count` | 検出された違反の総数 |
+`.github/workflows/migration-lint.yml` で PR 時に自動実行される。
+`db/migrations/` 配下のファイルが変更された PR に対して lint を実行し、違反があれば PR 上にアノテーションを表示する。
 
 ## Lint ルール
 

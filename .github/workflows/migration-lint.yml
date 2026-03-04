@@ -1,0 +1,19 @@
+name: Migration Lint
+
+on:
+  pull_request:
+    paths:
+      - 'db/migrations/**'
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Run migration lint
+        env:
+          MIGRATION_DIR: db/migrations
+          BASE_REF: ${{ github.event.pull_request.base.sha }}
+        run: bash scripts/lint.sh
